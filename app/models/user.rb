@@ -7,19 +7,16 @@ class User < ActiveRecord::Base
   has_many :learnables
   has_many :shareables
 
-  def self.from_omniauth(auth)
-    where(provider: auth.provider, uid: auth.uid).first_or_create do |user|
-      user.email = auth.info.email
-      user.password = Devise.friendly_token[0,20]
-      user.name = auth.info.name   # assuming the user model has a name
-    end
-  end
+  def self.find_for_google_oauth2(access_token, signed_in_resource=nil)
+    data = access_token.info
+    user = User.where(:email => data["email"]).first
 
-  def self.new_with_session(params, session)
-    super.tap do |user|
-      if data = session["devise.google_data"] && session["devise.google_data"]["extra"]["raw_info"]
-        user.email = data["email"] if user.email.blank?
-      end
+    unless user
+      user = User.create(username: data["name"],
+           email: data["email"],
+           password: Devise.friendly_token[0,20]
+        )
     end
+    user
   end
 end

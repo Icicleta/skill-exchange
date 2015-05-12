@@ -1,4 +1,18 @@
-Hello world!
+<div class="Center site">
+  <h1>SkillExchange</h1>
+
+  <%= link_to 'Learn', new_learnable_path %>
+
+  <% if user_signed_in? %>
+    Learnables:
+    <% if current_user.learnables.any? %>
+      <% current_user.learnables.each do |learnable| %>
+        <%= Skill.find(learnable.skill_id).name %>
+      <% end %>
+    <% end %>
+  <% end %>
+
+</div>
 
 <%= link_to 'Learn', new_learnable_path %>
 <%= link_to 'Teach', new_shareable_path %>
@@ -25,3 +39,4 @@ Hello world!
   <% end %>
 
 <% end %>
+
