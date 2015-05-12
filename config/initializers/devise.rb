@@ -234,6 +234,10 @@ Devise.setup do |config|
   # up on your models and hooks.
   # config.omniauth :github, 'APP_ID', 'APP_SECRET', scope: 'user,public_repo'
 
+  require "omniauth-google-oauth2"
+  config.omniauth :google_oauth2, ENV["GOOGLE_KEY"], ENV["GOOGLE_SECRET"],
+                                { access_type: "offline", approval_prompt: "force" }
+
   # config.omniauth :google_oauth2, Rails.application.application.google_app_id, Rails.application.application.google_app_secret
 
   # ==> Warden configuration
